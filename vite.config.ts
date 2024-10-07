@@ -12,6 +12,7 @@ export default defineConfig({
     alias: {
       "@schemas": path.resolve(__dirname, "src/schemas"),
       "@models": path.resolve(__dirname, "src/models"),
+      "@types": path.resolve(__dirname, "src/types"),
     },
   },
 });
