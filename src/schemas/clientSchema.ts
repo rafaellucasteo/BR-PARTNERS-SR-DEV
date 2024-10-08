@@ -1,22 +1,69 @@
 import { z } from "zod";
+import { isValidCnpj, isValidCpf, isValidEmail, isValidPhone } from "../utils";
 
-const phoneRegex = /^\(?\d{2}\)?\s9\d{4}-\d{4}$/;
+export const clientSchema = z
+  .object({
+    type: z.enum(["PF", "PJ"]),
+    clientName: z.string().optional(),
+    fantasyName: z.string().optional(),
+    businessName: z.string().optional(),
+    document: z.string(),
+    email: z.string(),
+    phone: z.string(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.type === "PF" && !data.clientName) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["clientName"],
+        message: "Nome é obrigatório para PF",
+      });
+    }
 
-const pfSchema = z.object({
-  type: z.literal("PF"),
-  clientName: z.string().nonempty("Nome é obrigatório para PF"),
-  document: z.string().length(11, "CPF deve conter 11 dígitos"),
-  email: z.string().email("Email inválido"),
-  phone: z.string().regex(phoneRegex, "Telefone inválido"),
-});
+    if (data.type === "PJ") {
+      if (!data.fantasyName) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["fantasyName"],
+          message: "Nome Fantasia é obrigatório para PJ",
+        });
+      }
+      if (!data.businessName) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ["businessName"],
+          message: "Razão Social é obrigatória para PJ",
+        });
+      }
+    }
 
-const pjSchema = z.object({
-  type: z.literal("PJ"),
-  fantasyName: z.string().nonempty("Nome Fantasia é obrigatório para PJ"),
-  businessName: z.string().nonempty("Razão Social é obrigatória para PJ"),
-  document: z.string().length(14, "CNPJ deve conter 14 dígitos"),
-  email: z.string().email("Email inválido"),
-  phone: z.string().regex(phoneRegex, "Telefone inválido"),
-});
+    if (data.type === "PF" && !isValidCpf(data.document)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["document"],
+        message: "CPF inválido",
+      });
+    } else if (data.type === "PJ" && !isValidCnpj(data.document)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["document"],
+        message: "CNPJ inválido",
+      });
+    }
 
-export const clientSchema = z.discriminatedUnion("type", [pfSchema, pjSchema]);
+    if (!isValidEmail(data.email)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["email"],
+        message: "Email inválido",
+      });
+    }
+
+    if (!isValidPhone(data.phone)) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["phone"],
+        message: "Telefone inválido",
+      });
+    }
+  });
