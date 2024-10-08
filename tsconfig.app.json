@@ -10,10 +10,11 @@
     "paths": {
       "@schemas/*": ["src/schemas/*"],
       "@models/*": ["src/models/*"],
-      "@utils/*": ["src/utils/*"]
+      "@utils/*": ["src/utils/*"],
+      "@types/*": ["src/types/*"],
     },
     "esModuleInterop": true,
-
+    "allowSyntheticDefaultImports": true,
    
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
