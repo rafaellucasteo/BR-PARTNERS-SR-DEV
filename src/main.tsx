@@ -6,7 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { ThemeProvider as StyledThemeProvider } from "styled-components";
-import App from "./App.tsx";
+import AppRoutes from "./Routes";
 import { theme } from "./styles/theme/index.ts";
 
 const queryClient = new QueryClient();
@@ -23,7 +23,7 @@ initializeMsw().then(() => {
         <MUIThemeProvider theme={theme}>
           <StyledThemeProvider theme={theme}>
             <QueryClientProvider client={queryClient}>
-              <App />
+              <AppRoutes />
             </QueryClientProvider>
           </StyledThemeProvider>
         </MUIThemeProvider>
