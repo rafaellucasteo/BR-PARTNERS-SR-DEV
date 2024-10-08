@@ -2,8 +2,9 @@ import { http, HttpResponse } from "msw";
 import { v4 as uuidv4 } from "uuid";
 import { clientSchema } from "../../../schemas/clientSchema";
 import { Client } from "../../../types/client";
+import { PersistentMap } from "../../../utils/persistentMap";
 
-const clients = new Map<string, Client>();
+const clients = new PersistentMap<string, Client>("clientsStorage");
 
 export const handlers = [
   http.get("http://localhost/clients/:id", async ({ params }) => {
