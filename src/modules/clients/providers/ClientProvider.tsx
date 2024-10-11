@@ -1,3 +1,4 @@
+import { clientSchema } from "@schemas/clientSchema";
 import {
   QueryClientProvider,
   UseMutationResult,
@@ -27,34 +28,68 @@ export function ClientProvider({ children }: ClientProviderProps) {
   const queryClient = useQueryClient();
 
   const fetchClients = async (): Promise<Client[]> => {
-    const response = await fetch("/api/clients");
+    const response = await fetch("http://localhost/clients");
     if (!response.ok) {
       throw new Error("Erro ao buscar os clientes");
     }
-    return response.json();
+    const data = await response.json();
+
+    const parseResult = clientSchema.array().safeParse(data);
+    if (!parseResult.success) {
+      const formattedErrors = formatZodErrors(parseResult.error.format());
+      throw new Error(JSON.stringify(formattedErrors));
+    }
+
+    return parseResult.data;
   };
 
   const fetchClientById = async (id: string): Promise<Client> => {
-    const response = await fetch(`/api/clients/${id}`);
+    const response = await fetch(`http://localhost/clients/${id}`);
     if (!response.ok) {
       throw new Error("Erro ao buscar o cliente");
     }
-    return response.json();
+    const data = await response.json();
+
+    const parseResult = clientSchema.safeParse(data);
+    if (!parseResult.success) {
+      const formattedErrors = formatZodErrors(parseResult.error.format());
+      throw new Error(JSON.stringify(formattedErrors));
+    }
+
+    return parseResult.data;
   };
 
   const createClient = useMutation<Client, Error, Client>({
     mutationFn: async (newClient: Client) => {
-      const response = await fetch("/api/clients", {
+      const parseResult = clientSchema.safeParse(newClient);
+      if (!parseResult.success) {
+        const formattedErrors = formatZodErrors(parseResult.error.format());
+        throw new Error(JSON.stringify(formattedErrors));
+      }
+
+      const response = await fetch("http://localhost/clients", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(newClient),
+        body: JSON.stringify(parseResult.data),
       });
+
       if (!response.ok) {
-        throw new Error("Erro ao criar o cliente");
+        const errorData = await response.json();
+        throw new Error(`${JSON.stringify(errorData)}`);
       }
-      return response.json();
+
+      const responseData = await response.json();
+      const responseParseResult = clientSchema.safeParse(responseData);
+      if (!responseParseResult.success) {
+        const formattedErrors = formatZodErrors(
+          responseParseResult.error.format()
+        );
+        throw new Error(JSON.stringify(formattedErrors));
+      }
+
+      return responseParseResult.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["clients"] });
@@ -63,17 +98,38 @@ export function ClientProvider({ children }: ClientProviderProps) {
 
   const updateClient = useMutation<Client, Error, Client>({
     mutationFn: async (updatedClient: Client) => {
-      const response = await fetch(`/api/clients/${updatedClient.id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedClient),
-      });
-      if (!response.ok) {
-        throw new Error("Erro ao atualizar o cliente");
+      const parseResult = clientSchema.safeParse(updatedClient);
+      if (!parseResult.success) {
+        const formattedErrors = formatZodErrors(parseResult.error.format());
+        throw new Error(JSON.stringify(formattedErrors));
       }
-      return response.json();
+
+      const response = await fetch(
+        `http://localhost/clients/${updatedClient.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(parseResult.data),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`${JSON.stringify(errorData)}`);
+      }
+
+      const responseData = await response.json();
+      const responseParseResult = clientSchema.safeParse(responseData);
+      if (!responseParseResult.success) {
+        const formattedErrors = formatZodErrors(
+          responseParseResult.error.format()
+        );
+        throw new Error(JSON.stringify(formattedErrors));
+      }
+
+      return responseParseResult.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["clients"] });
@@ -82,7 +138,7 @@ export function ClientProvider({ children }: ClientProviderProps) {
 
   const deleteClient = useMutation<void, Error, string>({
     mutationFn: async (id: string) => {
-      const response = await fetch(`/api/clients/${id}`, {
+      const response = await fetch(`http://localhost/clients/${id}`, {
         method: "DELETE",
       });
       if (!response.ok) {
@@ -102,6 +158,22 @@ export function ClientProvider({ children }: ClientProviderProps) {
       queryKey: ["client", id],
       queryFn: () => fetchClientById(id),
     });
+
+  function formatZodErrors(errors: any) {
+    const cleanedErrors: any = {};
+
+    for (const key in errors) {
+      if (
+        errors[key] &&
+        errors[key]._errors &&
+        errors[key]._errors.length > 0
+      ) {
+        cleanedErrors[key] = errors[key]._errors;
+      }
+    }
+
+    return cleanedErrors;
+  }
 
   const value = {
     clients: useFetchClients().data,
