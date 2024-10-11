@@ -151,7 +151,6 @@ export const handlers = [
   }),
 
   http.get("http://localhost/", async () => {
-    console.log('Intercepted a "GET /" request');
     return HttpResponse.json(
       { message: "Root path intercepted by MSW." },
       { status: 200 }

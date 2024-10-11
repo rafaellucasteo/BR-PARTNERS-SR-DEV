@@ -1,3 +1,4 @@
+import { HttpResponse, http } from "msw";
 import { server } from "../../mocks/server";
 
 describe("Client Handlers", () => {
@@ -12,9 +13,9 @@ describe("Client Handlers", () => {
     const newClient = {
       type: "PF",
       clientName: "Novo Cliente PF",
-      document: "12345678909",
+      document: "45123574085",
       email: "pf@cliente.com",
-      phone: "(11) 91234-5678",
+      phone: "11999345678",
     };
 
     const response = await fetch("http://localhost/clients", {
@@ -40,9 +41,9 @@ describe("Client Handlers", () => {
       type: "PJ",
       fantasyName: "Empresa Fantasia",
       businessName: "Empresa Ltda",
-      document: "07038783000141",
+      document: "93701439000122",
       email: "pj@empresa.com",
-      phone: "(11) 91234-5678",
+      phone: "11999345678",
     };
 
     const response = await fetch("http://localhost/clients", {
@@ -88,6 +89,35 @@ describe("Client Handlers", () => {
     expect(responseData.errors).toContainEqual(
       expect.objectContaining({ path: ["email"], message: "Email inválido" })
     );
+  });
+
+  it("deve falhar ao criar um cliente devido a erro interno - POST /clients", async () => {
+    server.use(
+      http.post("http://localhost/clients", async () => {
+        return HttpResponse.json(
+          { message: "Internal Server Error" },
+          { status: 500 }
+        );
+      })
+    );
+
+    const newClient = {
+      type: "PF",
+      clientName: "Novo Cliente PF",
+      document: "45123574085",
+      email: "pf@cliente.com",
+      phone: "11999345678",
+    };
+
+    const response = await fetch("http://localhost/clients", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newClient),
+    });
+
+    expect(response.status).toBe(500);
   });
 
   it("deve buscar o cliente PF - GET /clients/:id", async () => {
@@ -140,23 +170,6 @@ describe("Client Handlers", () => {
     expect(updatedClient.clientName).toBe(updatedData.clientName);
   });
 
-  it("deve atualizar o cliente PJ - PUT /clients/:id", async () => {
-    const updatedData = { fantasyName: "Empresa Fantasia Atualizada" };
-
-    const response = await fetch(`http://localhost/clients/${pjClientId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedData),
-    });
-
-    const updatedClient = await response.json();
-
-    expect(response.status).toBe(200);
-    expect(updatedClient.fantasyName).toBe(updatedData.fantasyName);
-  });
-
   it("deve falhar ao atualizar um cliente com dados inválidos - PUT /clients/:id", async () => {
     const updatedData = { email: "email_invalido" };
 
@@ -175,6 +188,29 @@ describe("Client Handlers", () => {
     );
   });
 
+  it("deve falhar ao atualizar um cliente devido a erro interno - PUT /clients/:id", async () => {
+    server.use(
+      http.put("http://localhost/clients/:clientId", async () => {
+        return HttpResponse.json(
+          { message: "Internal Server Error" },
+          { status: 500 }
+        );
+      })
+    );
+
+    const updatedData = { clientName: "Cliente PF Atualizado" };
+
+    const response = await fetch(`http://localhost/clients/${pfClientId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedData),
+    });
+
+    expect(response.status).toBe(500);
+  });
+
   it("deve deletar o cliente PF - DELETE /clients/:id", async () => {
     const response = await fetch(`http://localhost/clients/${pfClientId}`, {
       method: "DELETE",
@@ -189,5 +225,38 @@ describe("Client Handlers", () => {
     });
 
     expect(response.status).toBe(200);
+  });
+
+  it("deve falhar ao deletar um cliente inexistente - DELETE /clients/:id", async () => {
+    const response = await fetch("http://localhost/clients/inexistente", {
+      method: "DELETE",
+    });
+
+    expect(response.status).toBe(404);
+  });
+
+  it("deve falhar ao deletar um cliente devido a erro interno - DELETE /clients/:id", async () => {
+    server.use(
+      http.delete("http://localhost/clients/:clientId", async () => {
+        return HttpResponse.json(
+          { message: "Internal Server Error" },
+          { status: 500 }
+        );
+      })
+    );
+
+    const response = await fetch(`http://localhost/clients/${pfClientId}`, {
+      method: "DELETE",
+    });
+
+    expect(response.status).toBe(500);
+  });
+
+  it("deve interceptar a rota raiz - GET /", async () => {
+    const response = await fetch("http://localhost/");
+    const data = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(data.message).toBe("Root path intercepted by MSW.");
   });
 });

@@ -5,9 +5,9 @@ describe("Validação do Schema do Cliente", () => {
     const validPF = {
       type: "PF",
       clientName: "João Silva",
-      document: "78083793019",
+      document: "03691554083",
       email: "joao.silva@email.com",
-      phone: "(11) 91234-5678",
+      phone: "11912345678",
     };
     expect(() => clientSchema.parse(validPF)).not.toThrow();
   });
@@ -17,9 +17,9 @@ describe("Validação do Schema do Cliente", () => {
       type: "PJ",
       fantasyName: "Empresa X",
       businessName: "Empresa X LTDA",
-      document: "56136811000179",
+      document: "33201955000166",
       email: "contato@empresax.com",
-      phone: "(21) 91234-5678",
+      phone: "21912345678",
     };
     expect(() => clientSchema.parse(validPJ)).not.toThrow();
   });
@@ -27,9 +27,9 @@ describe("Validação do Schema do Cliente", () => {
   it("deve falhar na validação por ausência de clientName em PF", () => {
     const invalidPF = {
       type: "PF",
-      document: "12345678901",
+      document: "03691554083",
       email: "joao.silva@email.com",
-      phone: "(11) 91234-5678",
+      phone: "11912345678",
     };
     expect(() => clientSchema.parse(invalidPF)).toThrow(
       "Nome é obrigatório para PF"
@@ -40,9 +40,9 @@ describe("Validação do Schema do Cliente", () => {
     const invalidPJ = {
       type: "PJ",
       businessName: "Empresa X LTDA",
-      document: "12345678000199",
+      document: "33201955000166",
       email: "contato@empresax.com",
-      phone: "(21) 91234-5678",
+      phone: "21999345678",
     };
     expect(() => clientSchema.parse(invalidPJ)).toThrow(
       "Nome Fantasia é obrigatório para PJ"
@@ -53,9 +53,9 @@ describe("Validação do Schema do Cliente", () => {
     const invalidPJ = {
       type: "PJ",
       fantasyName: "Empresa X",
-      document: "12345678000199",
+      document: "33201955000166",
       email: "contato@empresax.com",
-      phone: "(21) 91234-5678",
+      phone: "21912345678",
     };
     expect(() => clientSchema.parse(invalidPJ)).toThrow(
       "Razão Social é obrigatória para PJ"
@@ -67,9 +67,9 @@ describe("Validação do Schema do Cliente", () => {
       type: "PJ",
       fantasyName: "Empresa X",
       businessName: "Empresa X LTDA",
-      document: "12345678000199",
+      document: "33201955000166",
       email: "contato@empresax.com",
-      phone: "(11) 12345-6789",
+      phone: "11123456789",
     };
     expect(() => clientSchema.parse(invalidPJ)).toThrow("Telefone inválido");
   });
@@ -79,9 +79,9 @@ describe("Validação do Schema do Cliente", () => {
       type: "PJ",
       fantasyName: "Empresa X",
       businessName: "Empresa X LTDA",
-      document: "12345678000199",
+      document: "33201955000166",
       email: "contato-empresax.com",
-      phone: "(21) 91234-5678",
+      phone: "21912345678",
     };
     expect(() => clientSchema.parse(invalidPJ)).toThrow("Email inválido");
   });
