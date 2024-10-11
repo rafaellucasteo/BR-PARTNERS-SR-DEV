@@ -1,7 +1,11 @@
 import { Client } from "../types/client";
 
 export function isValidCnpj(cnpj: string): boolean {
-  cnpj = cnpj.replace(/[^\d]+/g, "");
+  if (cnpj == "") return false;
+
+  if (cnpj.length != 18 && cnpj.length != 14) return false;
+
+  cnpj = sanitize(cnpj);
 
   if (cnpj == "") return false;
 
@@ -48,7 +52,16 @@ export function isValidCnpj(cnpj: string): boolean {
 }
 
 export function isValidCpf(cpf: string): boolean {
-  const value = cpf.replace(/[^0-9]/g, "");
+  if (cpf == "") return false;
+
+  if (cpf.length != 14 && cpf.length != 11) return false;
+
+  const value = sanitize(cpf);
+
+  if (value == "") return false;
+
+  if (value.length != 11) return false;
+
   let sum: number = 0;
   let rest: number;
   let i: number;
@@ -152,9 +165,23 @@ export function isValidPhone(phone: string): boolean {
     "98",
     "99",
   ];
-  const phoneRegex = /^\((\d{2})\)\s9\d{4}-\d{4}$/;
-  const match = phone.match(phoneRegex);
+
+  if (phone == "") return false;
+
+  if (phone.length != 16 && phone.length != 11) return false;
+
+  const cleanedPhone = sanitize(phone);
+
+  if (cleanedPhone == "") return false;
+
+  if (cleanedPhone.length != 11) return false;
+
+  const phoneRegex = /^(\d{2})9\d{8}$/;
+
+  const match = cleanedPhone.match(phoneRegex);
+
   if (!match) return false;
+
   const ddd = match[1];
   return validDDDs.includes(ddd);
 }
@@ -174,4 +201,8 @@ export function filterClientData(data: Client): Client {
   }
 
   return filteredData;
+}
+
+export function sanitize(input: string): string {
+  return input.replace(/\D/g, "");
 }

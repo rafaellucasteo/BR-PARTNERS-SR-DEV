@@ -1,7 +1,7 @@
 import { ToastFeedbackHandle } from "@components/atoms/ToastFeedback";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { filterClientData } from "@utils/validation";
-import { useRef, useState } from "react";
+import { filterClientData, sanitize } from "@utils/validation";
+import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { clientSchema } from "../../../../schemas/clientSchema";
 import { Client } from "../../../../types/client";
@@ -10,6 +10,7 @@ import { CreateClientViewProps } from "./types";
 
 export default function useCreateClientViewModel(): CreateClientViewProps {
   const [toastMessage, setToastMessage] = useState<string>("");
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const { clients, createClient, useFetchClients } = useClientContext();
 
   const toastRef = useRef<ToastFeedbackHandle>(null);
@@ -31,7 +32,8 @@ export default function useCreateClientViewModel(): CreateClientViewProps {
     handleSubmit,
     setValue,
     watch,
-    formState: { errors },
+    clearErrors,
+    formState: { errors, isValid },
   } = useForm<Client>({
     resolver: zodResolver(clientSchema),
     defaultValues: {
@@ -44,10 +46,26 @@ export default function useCreateClientViewModel(): CreateClientViewProps {
       email: "",
       phone: "",
     },
+    mode: "onBlur",
     shouldFocusError: false,
+    shouldUnregister: false,
   });
 
   const type = watch("type");
+
+  // Watch fields and clear errors on change
+  useEffect(() => {
+    const subscription = watch((_value, { name }) => {
+      if (name && errors[name]) {
+        clearErrors(name);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, clearErrors, errors]);
+
+  useEffect(() => {
+    setIsDisabled(!isValid);
+  }, [isValid]);
 
   const onSubmit = (data: any) => {
     const filteredData = filterClientData(data);
@@ -55,7 +73,14 @@ export default function useCreateClientViewModel(): CreateClientViewProps {
   };
 
   const handleCreateClient = (client: Client) => {
-    createClient.mutate(client, {
+    const payload: Client = {
+      ...client,
+      document: sanitize(client.document),
+      phone: sanitize(client.phone),
+    };
+    const filteredPayload = filterClientData(payload);
+    console.log(filteredPayload);
+    createClient.mutate(filteredPayload, {
       onError: (error: any) => {
         if (error.response) {
           console.error("Erro:", error.response.data);
@@ -82,5 +107,6 @@ export default function useCreateClientViewModel(): CreateClientViewProps {
     setValue,
     errors,
     onSubmit,
+    isDisabled,
   };
 }

@@ -20,4 +20,5 @@ export type CreateClientViewProps = {
   setValue: UseFormSetValue<Client>;
   errors: FieldErrors<Client>;
   onSubmit: (data: Client) => void;
+  isDisabled: boolean;
 };

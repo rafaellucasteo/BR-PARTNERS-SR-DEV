@@ -20,6 +20,7 @@ export default function CreateClientView({
   handleSubmit,
   register,
   onSubmit,
+  isDisabled,
 }: CreateClientViewProps) {
   return (
     <Screen>
@@ -104,6 +105,7 @@ export default function CreateClientView({
         </Box>
         <FooterModule>
           <Button
+            disabled={isDisabled}
             onClick={handleSubmit(onSubmit)}
             variant="contained"
             type="submit"

@@ -1,6 +1,6 @@
 import { ToastFeedbackHandle } from "@components/atoms/ToastFeedback";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { filterClientData } from "@utils/validation";
+import { filterClientData, sanitize } from "@utils/validation";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
@@ -12,6 +12,7 @@ import { EditClientViewProps } from "./types";
 export default function useEditClientViewModel(): EditClientViewProps {
   const navigate = useNavigate();
   const [toastMessage, setToastMessage] = useState<string>("");
+  const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [client, setClient] = useState<Client>();
   const { clients, updateClient, useFetchClientById } = useClientContext();
 
@@ -41,7 +42,8 @@ export default function useEditClientViewModel(): EditClientViewProps {
     handleSubmit,
     setValue,
     watch,
-    formState: { errors },
+    clearErrors,
+    formState: { errors, isValid },
   } = useForm<Client>({
     resolver: zodResolver(clientSchema),
     defaultValues: {
@@ -54,7 +56,9 @@ export default function useEditClientViewModel(): EditClientViewProps {
       email: "",
       phone: "",
     },
+    mode: "onBlur",
     shouldFocusError: false,
+    shouldUnregister: false,
   });
 
   const type = watch("type");
@@ -79,13 +83,34 @@ export default function useEditClientViewModel(): EditClientViewProps {
     }
   }, [data, setValue]);
 
+  // Watch fields and clear errors on change
+  useEffect(() => {
+    const subscription = watch((_value, { name }) => {
+      if (name && errors[name]) {
+        clearErrors(name);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, clearErrors, errors]);
+
+  useEffect(() => {
+    setIsDisabled(!isValid);
+  }, [isValid]);
+
   const onSubmit = (data: any) => {
     const filteredData = filterClientData(data);
-    handleCreateClient(filteredData);
+    handleUpdateClient(filteredData);
   };
 
-  const handleCreateClient = (client: Client) => {
-    updateClient.mutate(client, {
+  const handleUpdateClient = (client: Client) => {
+    const payload: Client = {
+      ...client,
+      document: sanitize(client.document),
+      phone: sanitize(client.phone),
+    };
+    const filteredPayload = filterClientData(payload);
+    console.log(filteredPayload);
+    updateClient.mutate(filteredPayload, {
       onError: (error: any) => {
         if (error.response) {
           console.error("Erro:", error.response.data);
@@ -114,5 +139,6 @@ export default function useEditClientViewModel(): EditClientViewProps {
     onSubmit,
     client,
     goToClientListView,
+    isDisabled,
   };
 }

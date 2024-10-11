@@ -25,6 +25,7 @@ export default function EditClientView({
   onSubmit,
   isLoading,
   goToClientListView,
+  isDisabled,
 }: EditClientViewProps) {
   return (
     <Screen>
@@ -112,6 +113,7 @@ export default function EditClientView({
           </Box>
           <FooterModule>
             <Button
+              disabled={isDisabled}
               onClick={handleSubmit(onSubmit)}
               variant="contained"
               type="submit"
