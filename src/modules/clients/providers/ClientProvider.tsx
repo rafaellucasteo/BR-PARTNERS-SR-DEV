@@ -6,8 +6,8 @@ import {
   useQuery,
   useQueryClient,
 } from "@tanstack/react-query";
+import { Client } from "@types";
 import { ReactNode, createContext, useContext } from "react";
-import { Client } from "../../../types/client";
 
 interface ClientProviderProps {
   children: ReactNode;

@@ -1,10 +1,10 @@
 import { ToastFeedbackHandle } from "@components/atoms/ToastFeedback";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { clientSchema } from "@schemas/clientSchema";
+import { Client } from "@types";
 import { filterClientData, sanitize } from "@utils/validation";
 import { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { clientSchema } from "../../../../schemas/clientSchema";
-import { Client } from "../../../../types/client";
 import { useClientContext } from "../../providers/ClientProvider";
 import { CreateClientViewProps } from "./types";
 

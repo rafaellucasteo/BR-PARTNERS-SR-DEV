@@ -1,4 +1,4 @@
-import Screen from "../../../components/molecules/Screen";
+import Screen from "@components/molecules/Screen";
 import ErrorState from "../../clients/components/ErrorState";
 import HeaderModule from "../../clients/components/HeaderModule";
 

@@ -1,4 +1,4 @@
-import Box from "../../../../components/atoms/Box";
+import Box from "@components/atoms/Box";
 
 interface FooterModuleProps {
   children?: React.ReactNode;

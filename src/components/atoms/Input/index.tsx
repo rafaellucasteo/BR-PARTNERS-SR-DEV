@@ -7,7 +7,7 @@ import Text from "../Text";
 export const Input = React.forwardRef(function CustomInput(
   props: InputProps & {
     error?: boolean;
-    errorMessage?: string;
+    errorMessage?: any;
     label?: string;
     mandatory?: boolean;
   },

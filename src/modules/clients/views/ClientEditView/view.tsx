@@ -1,10 +1,10 @@
-import Box from "../../../../components/atoms/Box";
-import Button from "../../../../components/atoms/Button";
-import { Input } from "../../../../components/atoms/Input";
-import { RadioInput } from "../../../../components/atoms/RadioButton";
-import Text from "../../../../components/atoms/Text";
-import ToastFeedback from "../../../../components/atoms/ToastFeedback";
-import Screen from "../../../../components/molecules/Screen";
+import Box from "@components/atoms/Box";
+import Button from "@components/atoms/Button";
+import { Input } from "@components/atoms/Input";
+import { RadioInput } from "@components/atoms/RadioButton";
+import Text from "@components/atoms/Text";
+import ToastFeedback from "@components/atoms/ToastFeedback";
+import Screen from "@components/molecules/Screen";
 import ErrorState from "../../components/ErrorState";
 
 import FooterModule from "../../components/FooterModule";

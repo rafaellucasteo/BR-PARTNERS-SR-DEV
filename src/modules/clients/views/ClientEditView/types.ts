@@ -1,11 +1,11 @@
 import { ToastFeedbackHandle } from "@components/atoms/ToastFeedback";
+import { Client } from "@types";
 import {
   FieldErrors,
   UseFormHandleSubmit,
   UseFormRegister,
   UseFormSetValue,
 } from "react-hook-form";
-import { Client } from "../../../../types/client";
 
 export type EditClientViewProps = {
   clients?: Client[];

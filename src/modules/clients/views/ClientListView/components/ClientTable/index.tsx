@@ -1,9 +1,9 @@
+import Box from "@components/atoms/Box";
+import Button from "@components/atoms/Button";
+import Card from "@components/atoms/Card";
+import DataGrid from "@components/atoms/DataGrid";
 import { GridColDef, GridRenderCellParams } from "@mui/x-data-grid";
-import Box from "../../../../../../components/atoms/Box";
-import Button from "../../../../../../components/atoms/Button";
-import Card from "../../../../../../components/atoms/Card";
-import DataGrid from "../../../../../../components/atoms/DataGrid";
-import { Client } from "../../../../../../types/client";
+import { Client } from "@types";
 
 interface ScreenProps {
   rows: Client[];

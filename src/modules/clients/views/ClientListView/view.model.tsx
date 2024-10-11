@@ -1,7 +1,7 @@
 import { ToastFeedbackHandle } from "@components/atoms/ToastFeedback";
+import { Client } from "@types";
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Client } from "../../../../types/client";
 import { useClientContext } from "../../providers/ClientProvider";
 import { ClientListViewProps } from "./types";
 

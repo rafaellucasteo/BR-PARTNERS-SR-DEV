@@ -1,5 +1,5 @@
-import ToastFeedback from "../../../../components/atoms/ToastFeedback";
-import Screen from "../../../../components/molecules/Screen";
+import ToastFeedback from "@components/atoms/ToastFeedback";
+import Screen from "@components/molecules/Screen";
 import ErrorState from "../../components/ErrorState";
 import HeaderModule from "../../components/HeaderModule";
 import LoadingState from "../../components/LoadingState";

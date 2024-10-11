@@ -1,7 +1,7 @@
-import Box from "../../../../components/atoms/Box";
-import Button from "../../../../components/atoms/Button";
-import Card from "../../../../components/atoms/Card";
-import Text from "../../../../components/atoms/Text";
+import Box from "@components/atoms/Box";
+import Button from "@components/atoms/Button";
+import Card from "@components/atoms/Card";
+import Text from "@components/atoms/Text";
 
 interface ErrorStateProps {
   title: string;

@@ -1,7 +1,7 @@
-import Box from "../../../../components/atoms/Box";
-import Button from "../../../../components/atoms/Button";
-import Modal from "../../../../components/atoms/Modal";
-import Text from "../../../../components/atoms/Text";
+import Box from "@components/atoms/Box";
+import Button from "@components/atoms/Button";
+import Modal from "@components/atoms/Modal";
+import Text from "@components/atoms/Text";
 
 interface ModalDialogProps {
   open: boolean;

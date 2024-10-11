@@ -1,6 +1,6 @@
 import { ToastFeedbackHandle } from "@components/atoms/ToastFeedback";
+import { Client } from "@types";
 import { Dispatch, SetStateAction } from "react";
-import { Client } from "../../../../types/client";
 
 export type ClientListViewProps = {
   clients?: Client[];

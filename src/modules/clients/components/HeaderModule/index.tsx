@@ -1,7 +1,7 @@
+import Button from "@components/atoms/Button";
+import Text from "@components/atoms/Text";
+import Header from "@components/molecules/Header";
 import { useNavigate } from "react-router-dom";
-import Button from "../../../../components/atoms/Button";
-import Text from "../../../../components/atoms/Text";
-import Header from "../../../../components/molecules/Header";
 
 interface HeaderModuleProps {
   title: string;

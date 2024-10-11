@@ -1,6 +1,6 @@
+import Box from "@components/atoms/Box";
+import Card from "@components/atoms/Card";
 import { LinearProgress } from "@mui/material";
-import Box from "../../../../components/atoms/Box";
-import Card from "../../../../components/atoms/Card";
 
 interface LoadingStateProps {}
 

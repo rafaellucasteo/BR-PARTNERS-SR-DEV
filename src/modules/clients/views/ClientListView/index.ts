@@ -1,4 +1,4 @@
-import withViewModel from "../../../../utils/withViewModel";
+import withViewModel from "@utils/withViewModel";
 
 import ClientListView from "./view";
 import useClientListViewModel from "./view.model";
