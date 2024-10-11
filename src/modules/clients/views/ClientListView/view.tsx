@@ -10,12 +10,9 @@ import { ClientListViewProps } from "./types";
 
 export default function ClientView({
   clients,
-  handleCreateClientPF,
-  handleCreateClientPJ,
   goToCreateClient,
   handleDeleteClient,
   goToEditClient,
-  clientsError,
   isClientsError,
   isLoading,
   standardizeClientsData,

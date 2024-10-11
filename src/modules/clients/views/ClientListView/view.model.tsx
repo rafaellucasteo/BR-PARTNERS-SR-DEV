@@ -23,7 +23,6 @@ export default function useClientListViewModel(): ClientListViewProps {
     }
   };
 
-  // Obtendo os estados da consulta de clientes
   const {
     isError: isClientsError,
     error: clientsError,

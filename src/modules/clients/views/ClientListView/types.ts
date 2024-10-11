@@ -13,10 +13,8 @@ export type ClientListViewProps = {
   isClientsError: boolean;
   isLoading: boolean;
   clientsError: any;
-  /* USER */
   selectedUser: string;
   setSelectedUser: React.Dispatch<React.SetStateAction<string>>;
-  /* MODAL */
   openModaDialog: boolean;
   setOpenModalDialog: Dispatch<SetStateAction<boolean>>;
   handleOpenModalDialog: () => void;
