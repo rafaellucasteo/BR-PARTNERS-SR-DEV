@@ -2,6 +2,8 @@ module.exports = {
   // Definindo o ambiente de teste como Node.js
   testEnvironment: "node",
 
+  moduleDirectories: ["node_modules", "src"],
+
   // Usando `ts-jest` como transformador para lidar com arquivos TypeScript
   transform: {
     "^.+\\.tsx?$": "ts-jest",
@@ -13,7 +15,7 @@ module.exports = {
   ],
 
   // Configuração para inicializar arquivos ou definir variáveis antes de executar os testes
-  //setupFilesAfterEnv: ["<rootDir>/src/services/mocksjest.setup.js"],
+  //setupFilesAfterEnv: ["<rootDir>/src/utils/setup-tests.js"],
 
   // Especifica os padrões dos arquivos de teste que serão procurados
   testMatch: [

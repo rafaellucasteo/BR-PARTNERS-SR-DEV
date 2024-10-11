@@ -6,12 +6,15 @@
     "module": "ESNext",
     "skipLibCheck": true,
 
+    "jsx": "react-jsx",
+
     "baseUrl": "./",
     "paths": {
       "@schemas/*": ["src/schemas/*"],
       "@models/*": ["src/models/*"],
       "@utils/*": ["src/utils/*"],
       "@types/*": ["src/types/*"],
+      "@components/*": ["src/components/*"],
     },
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -21,8 +24,7 @@
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
-    "jsx": "react-jsx",
-
+    
     
     "strict": true,
     "noUnusedLocals": true,
