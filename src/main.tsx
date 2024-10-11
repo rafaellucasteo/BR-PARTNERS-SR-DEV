@@ -1,3 +1,7 @@
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
 import {
   ThemeProvider as MUIThemeProvider,
   StyledEngineProvider,
@@ -12,18 +16,27 @@ import { theme } from "./styles/theme/index.ts";
 
 const queryClient = new QueryClient();
 
-createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <StyledEngineProvider injectFirst>
-      <MUIThemeProvider theme={theme}>
-        <StyledThemeProvider theme={theme}>
-          <QueryClientProvider client={queryClient}>
-            <ClientProvider>
-              <AppRoutes />
-            </ClientProvider>
-          </QueryClientProvider>
-        </StyledThemeProvider>
-      </MUIThemeProvider>
-    </StyledEngineProvider>
-  </StrictMode>
+async function initializeMsw() {
+  if (process.env.NODE_ENV === "development" || true) {
+    const { worker } = await import("./services/mocks/browser");
+    worker.start();
+  }
+}
+
+initializeMsw().then(() =>
+  createRoot(document.getElementById("root")!).render(
+    <StrictMode>
+      <StyledEngineProvider injectFirst>
+        <MUIThemeProvider theme={theme}>
+          <StyledThemeProvider theme={theme}>
+            <QueryClientProvider client={queryClient}>
+              <ClientProvider>
+                <AppRoutes />
+              </ClientProvider>
+            </QueryClientProvider>
+          </StyledThemeProvider>
+        </MUIThemeProvider>
+      </StyledEngineProvider>
+    </StrictMode>
+  )
 );

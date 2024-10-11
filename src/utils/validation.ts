@@ -1,3 +1,5 @@
+import { Client } from "../types/client";
+
 export function isValidCnpj(cnpj: string): boolean {
   cnpj = cnpj.replace(/[^\d]+/g, "");
 
@@ -160,4 +162,16 @@ export function isValidPhone(phone: string): boolean {
 export function isValidEmail(email: string): boolean {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
+}
+export function filterClientData(data: Client): Client {
+  const filteredData = { ...data };
+
+  if (data.type === "PF") {
+    delete filteredData.fantasyName;
+    delete filteredData.businessName;
+  } else if (data.type === "PJ") {
+    delete filteredData.clientName;
+  }
+
+  return filteredData;
 }
