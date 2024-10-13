@@ -32,7 +32,7 @@ O CRUD deve permitir a criação, leitura, atualização e remoção de clientes
 
 5. Para rodar os testes de integração:
    ```bash
-   pnpm test
+   pnpm jest
    ```
 
 ## Funcionalidades principais
@@ -51,6 +51,4 @@ Nesta seção, serão adicionados GIFs de tela demonstrando as funcionalidades d
 
 ## GIF Aleatório
 
-Aqui está um GIF aleatório para demonstração:
-
-![GIF Aleatório](https://media.giphy.com/media/l0HlU1VQU0zFJVi8w/giphy.gif)
+![GIF](https://s1.gifyu.com/images/SBF98.gif)
