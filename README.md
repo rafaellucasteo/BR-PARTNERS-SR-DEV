@@ -47,8 +47,4 @@ O CRUD deve permitir a criação, leitura, atualização e remoção de clientes
 
 Nesta seção, serão adicionados GIFs de tela demonstrando as funcionalidades do projeto.
 
-*(GIFs serão incluídos posteriormente)*
-
-## GIF Aleatório
-
 ![GIF](https://s1.gifyu.com/images/SBF98.gif)
